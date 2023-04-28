@@ -5,6 +5,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import PropTypes from 'prop-types';
 import React, { lazy, Suspense, useEffect } from 'react';
 import { BrowserRouter, Navigate, Route, Routes, useLocation } from 'react-router-dom';
+import AffinityScorecard from './components/AffinityScorecard';
 import Footer from './components/Footer';
 import Header from './components/Header';
 import TopMenu from './components/TopMenu';
@@ -88,6 +89,7 @@ function App() {
                     <Route path="*" element={<Navigate to="/notfound" />} />
                   </Routes>
                 </Suspense>
+                <AffinityScorecard />
                 <Footer />
               </div>
             </ScrollToTop>
