@@ -51,10 +51,10 @@ RecommendationList.propTypes = {
 
 RecommendationList.defaultProps = {
   title: '',
-  productsToDisplay: 3,
+  productsToDisplay: 5,
   displayAddToCard: false,
   displaySku: false,
-  displayQuickView: true,
+  displayQuickView: false,
 };
 const RecommendationListWidget = widget(RecommendationList, WidgetDataType.RECOMMENDATION);
 export default RecommendationListWidget;

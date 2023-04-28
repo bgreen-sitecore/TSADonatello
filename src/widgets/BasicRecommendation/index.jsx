@@ -49,7 +49,7 @@ Recommendation.propTypes = {
 Recommendation.defaultProps = {
   title: '',
   productsToDisplay: 4,
-  displayQuickView: true,
+  displayQuickView: false,
 };
 const RecommendationWidget = widget(Recommendation, WidgetDataType.RECOMMENDATION);
 export const RecommendationSkuContextWidget = skuContextWidget(Recommendation, WidgetDataType.RECOMMENDATION);

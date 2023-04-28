@@ -2,7 +2,7 @@ import React from 'react';
 import { PAGE_EVENTS_HOME } from '../../helpers/constants';
 import withPageTracking from '../../hocs/withPageTracking';
 import RecommendationListWidget from '../../widgets/BasicRecommendationList';
-import CustomPageWidgets from '../../widgets/CustomPageWidgets';
+import './styles.css';
 
 /**
  * This page shows the main page of the site.
@@ -11,35 +11,41 @@ import CustomPageWidgets from '../../widgets/CustomPageWidgets';
  */
 const Home = () => (
   <div>
-    {/** Renders all the widgets included in a hosted page configured on CEC panel for the current url in a custom way */}
-    <CustomPageWidgets className="mb-5" />
-
     <section className="py-5">
       <div className="container">
         <div className="row">
-          <div className="col-lg-4 col-md-4 col-sm-6">
+          <div className="col">
+            <div className="banner">Welcome to Sitecore Sports & Leisure</div>
+          </div>
+        </div>
+        <div className="row">
+          <div className="col">
             <RecommendationListWidget
-              title="HOT TREND"
+              title="Our Customer Favorites"
               rfkId="hs_trending"
-              productsToDisplay={3}
+              productsToDisplay={5}
               displayAddToCard
               displayQuickView
             />
           </div>
-          <div className="col-lg-4 col-md-4 col-sm-6">
+        </div>
+        <div className="row">
+          <div className="col">
             <RecommendationListWidget
-              title="BEST SELLER"
+              title="What's Hot this Spring"
               rfkId="hs_best_seller"
-              productsToDisplay={3}
+              productsToDisplay={5}
               displayAddToCard
               displayQuickView
             />
           </div>
-          <div className="col-lg-4 col-md-4 col-sm-6">
+        </div>
+        <div className="row">
+          <div className="col">
             <RecommendationListWidget
-              title="FEATURE"
+              title="Gear to Get You Moving"
               rfkId="hs_feature"
-              productsToDisplay={3}
+              productsToDisplay={5}
               displayAddToCard
               displayQuickView
             />

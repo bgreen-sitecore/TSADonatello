@@ -3,12 +3,14 @@ import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 const ProductRootStyled = styled(ProductCard.Root)`
-  display: flex;
-  height: 200px;
+  height: 100%;
   width: 100%;
-  padding: var(--sdc-spacing-xs);
   cursor: pointer;
   position: relative;
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+
+  text-align: left;
+  vertical-align: top;
 
   &:focus-within {
   }
@@ -28,7 +30,6 @@ const ButtonContainerStyled = styled.div`
 
 const AddToCartStyled = styled.button`
   display: none;
-  border: none;
   width: 40px;
   height: 40px;
   margin-left: 5px;

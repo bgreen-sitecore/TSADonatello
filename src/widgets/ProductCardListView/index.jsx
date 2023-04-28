@@ -83,8 +83,10 @@ const ProductCard = (props) => {
             {product.name}
           </ProductCardStyled.Link>
         </ProductCardStyled.Name>
-        {product.final_price && <ProductCardStyled.Price>${product.final_price}</ProductCardStyled.Price>}
-        {discount > 0 && <del className="text-muted ms-2">${product.price}</del>}
+        <div style={{ textAlign: 'right' }}>
+          {product.final_price && <ProductCardStyled.Price>${product.final_price}</ProductCardStyled.Price>}
+          {discount > 0 && <del className="text-muted ms-2">${product.price}</del>}
+        </div>
       </ProductCardStyled.Right>
     </ProductCardStyled.Root>
   );
