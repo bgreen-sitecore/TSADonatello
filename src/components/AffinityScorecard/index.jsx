@@ -8,7 +8,7 @@ import sitecore from '../../images/sitecore.png';
 import './styles.css';
 
 function AffinityScorecard() {
-  const domain = '188442542';
+  const domain = '211430803';
   // const [uuid, setUUID] = getCookie('__ruid');
   const uuid = PageController.getContext().getUserUuid();
   const dispUUID = `${PageController.getContext().getUserUuid().substring(0, 40)}...`;
@@ -37,28 +37,24 @@ function AffinityScorecard() {
         for (let i = 0; i < affinity.length; i += 1) {
           const affinityValues = [];
           const name = affinity[i][0];
-          console.log(name);
           let values = affinity[i][1];
           if (values != null) {
             values = values.sort((a, b) => b.score - a.score);
-
-            let valCount = values.length;
-            // const valLeft = values.length - 5;
-            if (name === 'category_ids' && valCount > 5) {
-              valCount = 5;
+            if (name !== 'category_ids' && name !== 'all_category_ids') {
+              const valLeft = values.length - 5;
+              for (let v = 0; v < values.length; v += 1) {
+                let score = Number(values[v].score).toFixed(3);
+                let val = values[v].value;
+                if (v < 5) {
+                  affinityValues[v] = { val, score };
+                } else if (v === 5) {
+                  score = 0;
+                  val = `${valLeft} more...`;
+                  affinityValues[5] = { val, score };
+                }
+              }
+              thisAffinities.push({ name, affinityValues });
             }
-            for (let v = 0; v < valCount; v += 1) {
-              const score = Number(values[v].score).toFixed(3);
-              const val = values[v].value;
-              affinityValues[v] = { val, score };
-            }
-            if (name === 'category_ids' && values.length > 5) {
-              // const score = 0;
-              // const val = `${valLeft} more...`;
-              // affinityValues[v] = { val, score };
-            }
-            thisAffinities.push({ name, affinityValues });
-            // console.log(thisAffinities);
           }
         }
       }
@@ -215,7 +211,7 @@ function AffinityScorecard() {
           .then((response) => response.json())
           .then((data) => {
             // eslint-disable-next-line no-console
-            // console.log(data);
+            console.log(data);
             setUserProfile(data);
             setAffinities(buildAffinities(data));
             setKeywords(buildKeywords(data));
