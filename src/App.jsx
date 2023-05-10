@@ -17,8 +17,6 @@ import 'react-notifications-component/dist/theme.css';
 import './App.css';
 import { WishlistProvider } from './hooks/wishlist';
 
-import { engage } from './engage';
-
 const HomeView = lazy(() => import('./views/Home'));
 const ProductDetailView = lazy(() => import('./views/Product/Detail'));
 const CartView = lazy(() => import('./views/Cart/Cart'));
@@ -28,19 +26,6 @@ const InternalServerErrorView = lazy(() => import('./views/pages/500'));
 const SearchView = lazy(() => import('./views/SearchView'));
 const CategoryView = lazy(() => import('./views/CategoryView'));
 const WishlistView = lazy(() => import('./views/Wishlist'));
-
-const sendPageViewEvent = async () => {
-  const response = await engage.pageView({
-    channel: 'WEB',
-    currency: 'USD',
-  });
-
-  // For testing and debugging purposes only
-  if (response) {
-    console.log('Copy-paste the following line into Sitecore CDP, Guests, Search field:');
-    console.log('bid:', engage.getBrowserId());
-  }
-};
 
 const ScrollToTop = ({ children }) => {
   const { pathname } = useLocation();
@@ -75,14 +60,6 @@ function App() {
   });
   const bodyElement = document.body;
   setStyle(bodyElement, style);
-
-  useEffect(() => {
-    if (engage !== undefined) {
-      sendPageViewEvent();
-    } else {
-      console.log('engage is undefined');
-    }
-  }, []);
 
   return (
     <WidgetsProvider
