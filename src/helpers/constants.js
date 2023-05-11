@@ -8,3 +8,7 @@ export const PAGE_EVENTS_CATEGORY = 'category';
 export const PAGE_EVENTS_CART = 'cart';
 export const PAGE_EVENTS_SEARCH = 'search';
 export const PAGE_EVENTS_ORDER = 'order';
+export const CDP_CHANNEL = 'WEB';
+export const CDP_CURRENCY = 'USD';
+export const CDP_POINT_OF_SALE = 'donatello-delta';
+export const CDP_LANGUAGE = 'en';
