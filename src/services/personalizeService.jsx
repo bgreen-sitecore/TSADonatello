@@ -49,4 +49,16 @@ export const clickAddEvent = async (product, inputQuantity) => {
   await engage.event('ADD', eventData, extensionData);
 };
 
+export const handlePersonalization = async (experienceFriendlyId) => {
+  const personalizationData = {
+    channel: CDP_CHANNEL,
+    currency: CDP_CURRENCY,
+    pointOfSale: CDP_POINT_OF_SALE,
+    friendlyId: experienceFriendlyId,
+  };
+
+  const response = await engage.personalize(personalizationData);
+  console.log('Personalized Reponse : ', response);
+};
+
 export default { sendPageViewEvent };
