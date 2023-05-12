@@ -2,11 +2,11 @@ import { init } from '@sitecore/engage';
 // eslint-disable-next-line import/no-mutable-exports
 let engage;
 
-export const CDP_POINT_OF_SALE = 'donatello-delta';
+export const CDP_CLIENT_KEY = 'pqsSIOPAxhMC9zJLJSZNFURPNqALIFwd';
 
 const loadEngage = async () => {
   engage = await init({
-    clientKey: 'pqsSIOPAxhMC9zJLJSZNFURPNqALIFwd',
+    clientKey: CDP_CLIENT_KEY,
     targetURL: 'https://api-engage-eu.sitecorecloud.io',
     pointOfSale: 'donatello-delta',
     cookieDomain: '.donatello-beta.vercel.app',

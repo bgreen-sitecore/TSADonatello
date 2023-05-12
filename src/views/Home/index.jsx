@@ -4,7 +4,7 @@ import withPageTracking from '../../hocs/withPageTracking';
 import RecommendationListWidget from '../../widgets/BasicRecommendationList';
 import './styles.css';
 
-import { handlePersonalization } from '../../services/personalizeService';
+import { handlePersonalizationManual } from '../../services/personalizeService';
 
 /**
  * This page shows the main page of the site.
@@ -12,9 +12,17 @@ import { handlePersonalization } from '../../services/personalizeService';
  * The other static recommendation widgets render here has been created in CEC panel with the configuration "WILL BE USED IN" set in "Common across all Pages" (hs_trending, hs_best_seller, hs_feature) to can be used in a hard code mode
  */
 const Home = () => {
-  console.log('home loading');
+  const [rec1Title, setrec1Title] = React.useState('Our Customer Favorites');
+  const [rec2Title, setrec2Title] = React.useState("What's Hot this Spring");
+  const [rec3Title, setrec3Title] = React.useState('Gear to Get You Moving');
 
-  handlePersonalization('laser_personas');
+  const response = handlePersonalizationManual('laser_personas');
+
+  response.then((personation) => {
+    setrec1Title(personation.recs[0].recTitle);
+    setrec2Title(personation.recs[1].recTitle);
+    setrec3Title(personation.recs[2].recTitle);
+  });
 
   return (
     <div>
@@ -28,7 +36,7 @@ const Home = () => {
           <div className="row">
             <div className="col">
               <RecommendationListWidget
-                title="Our Customer Favorites"
+                title={rec1Title}
                 rfkId="hs_trending"
                 productsToDisplay={5}
                 displayAddToCard
@@ -39,7 +47,7 @@ const Home = () => {
           <div className="row">
             <div className="col">
               <RecommendationListWidget
-                title="What's Hot this Spring"
+                title={rec2Title}
                 rfkId="hs_best_seller"
                 productsToDisplay={5}
                 displayAddToCard
@@ -50,7 +58,7 @@ const Home = () => {
           <div className="row">
             <div className="col">
               <RecommendationListWidget
-                title="Gear to Get You Moving"
+                title={rec3Title}
                 rfkId="hs_feature"
                 productsToDisplay={5}
                 displayAddToCard

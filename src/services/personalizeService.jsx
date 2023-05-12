@@ -1,4 +1,4 @@
-import { engage } from '../engage';
+import { CDP_CLIENT_KEY, engage } from '../engage';
 import { CDP_CHANNEL, CDP_CURRENCY, CDP_LANGUAGE, CDP_POINT_OF_SALE } from '../helpers/constants';
 
 export const sendPageViewEvent = async (pageType, pageContext) => {
@@ -59,6 +59,40 @@ export const handlePersonalization = async (experienceFriendlyId) => {
 
   const response = await engage.personalize(personalizationData);
   console.log('Personalized Reponse : ', response);
+};
+
+export const handlePersonalizationManual = async (experienceFriendlyId) => {
+  // Make a CORS request using the fetch API
+
+  let output = null;
+
+  const personalizationData = {
+    clientKey: CDP_CLIENT_KEY,
+    channel: CDP_CHANNEL,
+    language: CDP_LANGUAGE,
+    currencyCode: CDP_CURRENCY,
+    pointOfSale: CDP_POINT_OF_SALE,
+    friendlyId: experienceFriendlyId,
+    browserId: engage.getBrowserId(),
+  };
+
+  await fetch('https://api-engage-eu.sitecorecloud.io/v2/callFlows', {
+    method: 'POST',
+    headers: {
+      'Origin': 'http://localhost:3000',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(personalizationData),
+  })
+    .then((response) => {
+      output = response.json();
+    })
+    .catch((error) => {
+      // Handle the error
+      console.log('Personalizeation error: ', error);
+    });
+
+  return output;
 };
 
 export default { sendPageViewEvent };
