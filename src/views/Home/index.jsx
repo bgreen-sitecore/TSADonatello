@@ -11,17 +11,33 @@ import { handlePersonalizationManual } from '../../services/personalizeService';
  * CustomPageWidgets will render some content blocks and recommendations widgets configured for this page on CEC panel.
  * The other static recommendation widgets render here has been created in CEC panel with the configuration "WILL BE USED IN" set in "Common across all Pages" (hs_trending, hs_best_seller, hs_feature) to can be used in a hard code mode
  */
+
 const Home = () => {
   const [rec1Title, setrec1Title] = React.useState('Our Customer Favorites');
   const [rec2Title, setrec2Title] = React.useState("What's Hot this Spring");
   const [rec3Title, setrec3Title] = React.useState('Gear to Get You Moving');
 
+  const [rec1Recipe, setrec1Recipe] = React.useState('hs_trending');
+  const [rec2Recipe, setrec2Recipe] = React.useState('hs_best_seller');
+  const [rec3Recipe, setrec3Recipe] = React.useState('hs_feature');
+
+  const [title, setTitle] = React.useState('Welcome to Sitecore Sports & Leisure');
+  const [homepageImg, setHomepageImg] = React.useState(
+    'https://d368g9lw5ileu7.cloudfront.net/races/races-30xxx/30749/raceBanner-3YS4GBud-byXW04.jpg',
+  );
   const response = handlePersonalizationManual('laser_personas');
 
   response.then((personation) => {
     setrec1Title(personation.recs[0].recTitle);
     setrec2Title(personation.recs[1].recTitle);
     setrec3Title(personation.recs[2].recTitle);
+
+    setrec1Recipe(personation.recs[0].recipeID);
+    setrec2Recipe(personation.recs[1].recipeID);
+    setrec3Recipe(personation.recs[2].recipeID);
+
+    setTitle(personation.homepageTitle);
+    setHomepageImg(personation.homepageImage);
   });
 
   return (
@@ -30,14 +46,21 @@ const Home = () => {
         <div className="container">
           <div className="row">
             <div className="col">
-              <div className="banner">Welcome to Sitecore Sports & Leisure</div>
+              <div
+                className="banner"
+                style={{
+                  backgroundImage: `url(${homepageImg})`,
+                }}
+              >
+                {title}
+              </div>
             </div>
           </div>
           <div className="row">
             <div className="col">
               <RecommendationListWidget
                 title={rec1Title}
-                rfkId="hs_trending"
+                rfkId={rec1Recipe}
                 productsToDisplay={5}
                 displayAddToCard
                 displayQuickView
@@ -48,7 +71,7 @@ const Home = () => {
             <div className="col">
               <RecommendationListWidget
                 title={rec2Title}
-                rfkId="hs_best_seller"
+                rfkId={rec2Recipe}
                 productsToDisplay={5}
                 displayAddToCard
                 displayQuickView
@@ -59,7 +82,7 @@ const Home = () => {
             <div className="col">
               <RecommendationListWidget
                 title={rec3Title}
-                rfkId="hs_feature"
+                rfkId={rec3Recipe}
                 productsToDisplay={5}
                 displayAddToCard
                 displayQuickView
