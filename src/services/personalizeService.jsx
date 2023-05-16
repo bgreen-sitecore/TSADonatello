@@ -17,6 +17,30 @@ export const sendPageViewEvent = async (pageType, pageContext) => {
   }
 };
 
+export const sendIdentityEvent = async (inputEmail, inputPage) => {
+  const eventData = {
+    channel: CDP_CHANNEL,
+    currency: CDP_CURRENCY,
+    pointOfSale: CDP_POINT_OF_SALE,
+    language: CDP_LANGUAGE,
+    page: inputPage,
+    email: inputEmail,
+    identifiers: [
+      {
+        id: inputEmail,
+        provider: 'email',
+      },
+    ],
+  };
+
+  // Send IDENTITY event to Sitecore CDP
+  const response = await engage.identity(eventData);
+
+  if (response) {
+    console.log('Sitecore Engage SDK ::: Identity Event. bid: ', engage.getBrowserId());
+  }
+};
+
 export const clickAddEvent = async (product, inputQuantity) => {
   const eventData = {
     channel: CDP_CHANNEL,

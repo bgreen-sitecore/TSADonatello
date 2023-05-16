@@ -26,6 +26,7 @@ const InternalServerErrorView = lazy(() => import('./views/pages/500'));
 const SearchView = lazy(() => import('./views/SearchView'));
 const CategoryView = lazy(() => import('./views/CategoryView'));
 const WishlistView = lazy(() => import('./views/Wishlist'));
+const LoginView = lazy(() => import('./views/Login'));
 
 const ScrollToTop = ({ children }) => {
   const { pathname } = useLocation();
@@ -61,6 +62,8 @@ function App() {
   const bodyElement = document.body;
   setStyle(bodyElement, style);
 
+  // const [isLoginOpen] = loginStates();
+
   return (
     <WidgetsProvider
       env={process.env.REACT_APP_ENV}
@@ -85,6 +88,7 @@ function App() {
                     <Route exact path="/order/confirmation" element={<OrderView />} />
                     <Route exact path="/500" element={<InternalServerErrorView />} />
                     <Route exact path="/account/wishlist" element={<WishlistView />} />
+                    <Route exact path="/account/login" element={<LoginView />} />
                     <Route path="/notfound" element={<NotFoundView />} />
                     <Route path="*" element={<Navigate to="/notfound" />} />
                   </Routes>
