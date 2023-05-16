@@ -49,7 +49,9 @@ const Home = () => {
               <div
                 className="banner"
                 style={{
-                  backgroundImage: `url(${homepageImg})`,
+                  'backgroundImage': `url(${homepageImg})`,
+                  'display': 'table - cell',
+                  'vertical-align': 'bottom',
                 }}
               >
                 {title}

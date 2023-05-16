@@ -1,8 +1,10 @@
+import { ReactComponent as IconPersonBadgeFill } from 'bootstrap-icons/icons/person-badge-fill.svg';
 import React, { useState } from 'react';
 import { sendIdentityEvent } from '../../services/personalizeService';
 
 const LoginView = () => {
   const [email, setEmail] = useState('');
+  const [loggedIn, setLoggedIn] = useState(false);
 
   const handleEmailChange = (event) => {
     setEmail(event.target.value);
@@ -13,6 +15,7 @@ const LoginView = () => {
     // Perform login logic here
     console.log('Login submitted!', email);
     sendIdentityEvent(email, 'login');
+    setLoggedIn(true);
   };
 
   return (
@@ -49,6 +52,13 @@ const LoginView = () => {
           </table>
         </form>
       </div>
+      {loggedIn && (
+        <div className="alert alert-success mt-3">
+          <p className="m-0">
+            <IconPersonBadgeFill className="i-va me-2" /> Logged in as {email}
+          </p>
+        </div>
+      )}
     </>
   );
 };
