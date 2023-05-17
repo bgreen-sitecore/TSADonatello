@@ -25,6 +25,8 @@ const Home = () => {
   const [homepageImg, setHomepageImg] = React.useState(
     'https://d368g9lw5ileu7.cloudfront.net/races/races-30xxx/30749/raceBanner-3YS4GBud-byXW04.jpg',
   );
+  const [position, setPosition] = React.useState('top');
+
   const response = handlePersonalizationManual('laser_personas');
 
   response.then((personation) => {
@@ -38,6 +40,7 @@ const Home = () => {
 
     setTitle(personation.homepageTitle);
     setHomepageImg(personation.homepageImage);
+    setPosition(personation.homepageTitlePosition);
   });
 
   return (
@@ -49,12 +52,29 @@ const Home = () => {
               <div
                 className="banner"
                 style={{
-                  'backgroundImage': `url(${homepageImg})`,
-                  'display': 'table - cell',
-                  'vertical-align': 'bottom',
+                  backgroundImage: `url(${homepageImg})`,
                 }}
               >
-                {title}
+                {position === 'top' && (
+                  <p
+                    className="banner-title"
+                    style={{
+                      'margin-top': '0px',
+                    }}
+                  >
+                    {title}
+                  </p>
+                )}
+                {position === 'bottom' && (
+                  <p
+                    className="banner-title"
+                    style={{
+                      'margin-top': '200px',
+                    }}
+                  >
+                    {title}
+                  </p>
+                )}
               </div>
             </div>
           </div>

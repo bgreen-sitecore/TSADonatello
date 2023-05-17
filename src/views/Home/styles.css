@@ -10,8 +10,6 @@
     background-repeat: no-repeat;
     background-size: 100% 100%;
     color: white;
-    font-size: 30px;
-    text-align: left;
     padding: 20px;
 }
 
@@ -19,3 +17,9 @@
         height: 250px;
         width: 100%;
     }
+
+.banner-title {
+    font-size: 30px;
+    margin-top: 200px; /* Add some margin if needed */
+    text-align: left;
+}
