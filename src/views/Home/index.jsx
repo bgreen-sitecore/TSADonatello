@@ -59,7 +59,7 @@ const Home = () => {
                   <p
                     className="banner-title"
                     style={{
-                      'margin-top': '0px',
+                      marginTop: '0px',
                     }}
                   >
                     {title}
@@ -69,7 +69,7 @@ const Home = () => {
                   <p
                     className="banner-title"
                     style={{
-                      'margin-top': '200px',
+                      marginTop: '200px',
                     }}
                   >
                     {title}

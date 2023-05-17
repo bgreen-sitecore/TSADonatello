@@ -1,5 +1,5 @@
-import { CDP_CLIENT_KEY, engage } from '../engage';
-import { CDP_CHANNEL, CDP_CURRENCY, CDP_LANGUAGE, CDP_POINT_OF_SALE } from '../helpers/constants';
+import { CDP_CLIENT_KEY, CDP_POINT_OF_SALE, CDP_TARGET_URL, engage } from '../engage';
+import { CDP_CHANNEL, CDP_CURRENCY, CDP_LANGUAGE } from '../helpers/constants';
 
 export const sendPageViewEvent = async (pageType, pageContext) => {
   const eventData = {
@@ -100,7 +100,9 @@ export const handlePersonalizationManual = async (experienceFriendlyId) => {
     browserId: engage.getBrowserId(),
   };
 
-  await fetch('https://api-engage-eu.sitecorecloud.io/v2/callFlows', {
+  const url = `${CDP_TARGET_URL}/v2/callFlows`;
+
+  await fetch(url, {
     method: 'POST',
     headers: {
       'Origin': 'http://localhost:3000',
