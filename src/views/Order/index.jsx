@@ -7,6 +7,7 @@ import { PAGE_EVENTS_ORDER } from '../../helpers/constants';
 import getProductUrl from '../../helpers/getProductUrl';
 import withPageTracking from '../../hocs/withPageTracking';
 import { useCart } from '../../hooks/cart';
+import { handleClickCheckoutEvent, handleClickConfirmEvent } from '../../services/personalizeService';
 import CustomPageWidgets from '../../widgets/CustomPageWidgets';
 
 function makeid(length) {
@@ -41,11 +42,19 @@ const OrderView = () => {
         discount: parseFloat(item.data.price) - parseFloat(item.data.final_price),
       });
     });
+
+    const orderId = makeid(32);
+
+    // CDP track order event
+    handleClickConfirmEvent('checkout', skusItems);
+    handleClickCheckoutEvent('checkout', orderId);
+
+    // discover track order event
     trackOrderConfirmEvent(
       cartItems.map(({ quantity, price, priceOriginal, sku }) => ({ quantity, price, priceOriginal, sku })),
       DUMMY_USER,
       {
-        orderId: makeid(32),
+        orderId,
         total,
         subtotal,
       },

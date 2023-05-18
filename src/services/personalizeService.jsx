@@ -121,4 +121,49 @@ export const handlePersonalizationManual = async (experienceFriendlyId) => {
   return output;
 };
 
+export const handleClickConfirmEvent = async (page, itemList) => {
+  const productList = [];
+
+  itemList.forEach((element) => {
+    productList.push({ item_id: element });
+  });
+
+  const eventData = {
+    channel: CDP_CHANNEL,
+    currency: CDP_CURRENCY,
+    pointOfSale: CDP_POINT_OF_SALE,
+    language: CDP_LANGUAGE,
+    page,
+    product: productList,
+  };
+
+  const extensionData = {};
+
+  const response = await engage.event('CONFIRM', eventData, extensionData);
+
+  if (response) {
+    console.log('Sitecore Engage SDK ::: Confirm Event. bid: ', engage.getBrowserId());
+  }
+};
+
+export const handleClickCheckoutEvent = async (page, orderReference) => {
+  const eventData = {
+    channel: CDP_CHANNEL,
+    currency: CDP_CURRENCY,
+    pointOfSale: CDP_POINT_OF_SALE,
+    language: CDP_LANGUAGE,
+    page,
+    reference_id: orderReference,
+    status: 'PURCHASED',
+  };
+
+  const extensionData = {};
+
+  const response = await engage.event('CHECKOUT', eventData, extensionData);
+
+  if (response) {
+    console.log('Sitecore Engage SDK ::: Checkout Event. bid: ', engage.getBrowserId());
+  }
+};
+
 export default { sendPageViewEvent };
