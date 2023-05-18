@@ -70,7 +70,11 @@ export const clickAddEvent = async (product, inputQuantity) => {
     size: product.size,
   };
 
-  await engage.event('ADD', eventData, extensionData);
+  const response = await engage.event('ADD', eventData, extensionData);
+
+  if (response) {
+    console.log('Sitecore Engage SDK ::: Add Event. bid: ', engage.getBrowserId());
+  }
 };
 
 export const handlePersonalization = async (experienceFriendlyId) => {
@@ -163,6 +167,27 @@ export const handleClickCheckoutEvent = async (page, orderReference) => {
 
   if (response) {
     console.log('Sitecore Engage SDK ::: Checkout Event. bid: ', engage.getBrowserId());
+  }
+};
+
+export const handleClickProductEvent = async (sku, rfkid) => {
+  const eventData = {
+    channel: CDP_CHANNEL,
+    currency: CDP_CURRENCY,
+    pointOfSale: CDP_POINT_OF_SALE,
+    language: CDP_LANGUAGE,
+    page: 'homepage',
+  };
+
+  const extensionData = {
+    sku,
+    rfkid,
+  };
+
+  const response = await engage.event('PRODUCT_CLICK', eventData, extensionData);
+
+  if (response) {
+    console.log('Sitecore Engage SDK ::: Product Click Event. bid: ', engage.getBrowserId());
   }
 };
 
