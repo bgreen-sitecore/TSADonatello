@@ -209,4 +209,23 @@ export const handleClickProductEvent = async (sku, rfkid) => {
   }
 };
 
+// for debugging/demo purposes only, not production
+export const closeSessionEvent = async () => {
+  const eventData = {
+    channel: CDP_CHANNEL,
+    currency: CDP_CURRENCY,
+    pointOfSale: CDP_POINT_OF_SALE,
+    language: CDP_LANGUAGE,
+    page: 'homepage',
+  };
+
+  const extensionData = {};
+
+  const response = await engage.event('FORCE_CLOSE', eventData, extensionData);
+
+  if (response) {
+    console.log('Sitecore Engage SDK :::Force Close Event. bid: ', engage.getBrowserId());
+  }
+};
+
 export default { sendPageViewEvent };
