@@ -4,7 +4,7 @@ import withPageTracking from '../../hocs/withPageTracking';
 import RecommendationListWidget from '../../widgets/BasicRecommendationList';
 import './styles.css';
 
-import { handlePersonalizationManual } from '../../services/personalizeService';
+import { handlePersonalizationManual, handleShownRecommendationsEvent } from '../../services/personalizeService';
 
 /**
  * This page shows the main page of the site.
@@ -29,18 +29,20 @@ const Home = () => {
 
   const response = handlePersonalizationManual('laser_personas');
 
-  response.then((personation) => {
-    setrec1Title(personation.recs[0].recTitle);
-    setrec2Title(personation.recs[1].recTitle);
-    setrec3Title(personation.recs[2].recTitle);
+  response.then((personalization) => {
+    setrec1Title(personalization.recs[0].recTitle);
+    setrec2Title(personalization.recs[1].recTitle);
+    setrec3Title(personalization.recs[2].recTitle);
 
-    setrec1Recipe(personation.recs[0].recipeID);
-    setrec2Recipe(personation.recs[1].recipeID);
-    setrec3Recipe(personation.recs[2].recipeID);
+    setrec1Recipe(personalization.recs[0].recipeID);
+    setrec2Recipe(personalization.recs[1].recipeID);
+    setrec3Recipe(personalization.recs[2].recipeID);
 
-    setTitle(personation.homepageTitle);
-    setHomepageImg(personation.homepageImage);
-    setPosition(personation.homepageTitlePosition);
+    setTitle(personalization.homepageTitle);
+    setHomepageImg(personalization.homepageImage);
+    setPosition(personalization.homepageTitlePosition);
+
+    handleShownRecommendationsEvent(personalization);
   });
 
   return (
