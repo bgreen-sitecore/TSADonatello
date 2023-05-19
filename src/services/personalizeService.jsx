@@ -17,6 +17,24 @@ export const sendPageViewEvent = async (pageType, pageContext) => {
   }
 };
 
+export const handleShownRecommendationsEvent = async (personalization) => {
+  const eventData = {
+    channel: CDP_CHANNEL,
+    currency: CDP_CURRENCY,
+    pointOfSale: CDP_POINT_OF_SALE,
+    language: CDP_LANGUAGE,
+    page: 'homepage',
+  };
+
+  const extensionData = personalization;
+
+  const response = await engage.event('SHOWN_RECOMMENDATIONS', eventData, extensionData);
+
+  if (response) {
+    console.log('Sitecore Engage SDK ::: Shown Recommendations Event. bid: ', engage.getBrowserId());
+  }
+};
+
 export const sendIdentityEvent = async (inputEmail, inputPage) => {
   const eventData = {
     channel: CDP_CHANNEL,
