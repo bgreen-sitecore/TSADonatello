@@ -7,7 +7,7 @@ import { Header, ProductsGrid, RecommendationContainer } from './styled';
 import ProductCardListView from '../ProductCardListView';
 
 export const RecommendationList = (props) => {
-  const { title, productsToDisplay, displayAddToCard, displaySku, displayQuickView, ...restProps } = props;
+  const { title, productsToDisplay, displayAddToCard, displaySku, displayQuickView, rfkId, ...restProps } = props;
   const {
     actions: { onProductClick },
     queryResult: { isLoading, isFetching, data: { content: { product: { value: products = [] } = {} } = {} } = {} },
@@ -32,6 +32,7 @@ export const RecommendationList = (props) => {
                 displayAddToCard={displayAddToCard}
                 displaySku={displaySku}
                 displayQuickView={displayQuickView}
+                rfkid={rfkId}
               />
             ))}
           </ProductsGrid>
@@ -47,6 +48,7 @@ RecommendationList.propTypes = {
   displayAddToCard: PropTypes.bool,
   displaySku: PropTypes.bool,
   displayQuickView: PropTypes.bool,
+  rfkId: PropTypes.string,
 };
 
 RecommendationList.defaultProps = {
@@ -55,6 +57,7 @@ RecommendationList.defaultProps = {
   displayAddToCard: false,
   displaySku: false,
   displayQuickView: false,
+  rfkId: '',
 };
 const RecommendationListWidget = widget(RecommendationList, WidgetDataType.RECOMMENDATION);
 export default RecommendationListWidget;

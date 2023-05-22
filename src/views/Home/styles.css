@@ -8,11 +8,8 @@
     margin-bottom: 25px;
     background-size: cover;
     background-repeat: no-repeat;
-    background-image: url('https://d368g9lw5ileu7.cloudfront.net/races/races-30xxx/30749/raceBanner-3YS4GBud-byXW04.jpg');
     background-size: 100% 100%;
     color: white;
-    font-size: 30px;
-    text-align: left;
     padding: 20px;
 }
 
@@ -20,3 +17,8 @@
         height: 250px;
         width: 100%;
     }
+
+.banner-title {
+    font-size: 30px;
+    text-align: left;
+}

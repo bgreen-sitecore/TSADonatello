@@ -3,21 +3,34 @@ import React, { useEffect } from 'react';
 import { PAGE_EVENTS_DEFAULT } from '../helpers/constants';
 import useUri from '../hooks/useUri';
 
+import { engage } from '../engage';
+import { sendPageViewEvent } from '../services/personalizeService';
+
 export const PageEventContext = React.createContext();
 /**
  * The page view event is handled in sitecore SDK, but for SPA it just happen on the first time.
  * So when user navigate is needed to track the page view event manually.
  * This is the purpouse of this hoc, set page uri and track the page view event
  */
+
 const withPageTracking =
   (Component, pageType = PAGE_EVENTS_DEFAULT) =>
   (props) => {
     const uri = useUri();
 
+    // disover page view event
     useEffect(() => {
       PageController.getContext().setPageUri(uri);
       trackPageViewEvent(PageController.getContext().toJson());
     }, [uri]);
+
+    // personalize page view event
+    useEffect(() => {
+      PageController.getContext().setPageUri(uri);
+      if (engage !== undefined) {
+        sendPageViewEvent(pageType, PageController.getContext().toJson());
+      }
+    }, []);
 
     return (
       <PageEventContext.Provider value={pageType}>

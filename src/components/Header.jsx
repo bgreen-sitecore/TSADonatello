@@ -1,7 +1,7 @@
 import { faUser } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ReactComponent as IconCart3 } from 'bootstrap-icons/icons/cart3.svg';
-import { ReactComponent as IconDoorClosedFill } from 'bootstrap-icons/icons/door-closed-fill.svg';
+import { ReactComponent as Fingerprint } from 'bootstrap-icons/icons/fingerprint.svg';
 import { ReactComponent as IconHeartFill } from 'bootstrap-icons/icons/heart-fill.svg';
 import { ReactComponent as IconPersonBadgeFill } from 'bootstrap-icons/icons/person-badge-fill.svg';
 import React from 'react';
@@ -13,6 +13,7 @@ import PreviewSearch from '../widgets/PreviewSearch';
 const Header = () => {
   const { cart } = useCart();
   const totalItems = cart.reduce((total, p) => total + p.quantity, 0);
+
   return (
     <>
       <header className="p-3 border-bottom bg-light">
@@ -67,8 +68,8 @@ const Header = () => {
                     <hr className="dropdown-divider" />
                   </li>
                   <li>
-                    <Link className="dropdown-item" to="/">
-                      <IconDoorClosedFill className="text-danger" /> Logout
+                    <Link className="dropdown-item" to="/account/login">
+                      <Fingerprint /> Login
                     </Link>
                   </li>
                 </ul>

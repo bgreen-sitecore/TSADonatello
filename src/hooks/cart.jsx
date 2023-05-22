@@ -3,7 +3,7 @@ import { PageController, trackAddToCartEvent } from '@sitecore-discover/react';
 
 import PropTypes from 'prop-types';
 import React, { useContext, useEffect, useReducer, useState } from 'react';
-import { ReactNotifications, Store as Notification } from 'react-notifications-component';
+import { Store as Notification, ReactNotifications } from 'react-notifications-component';
 import ProductNotification from '../components/ProductNotification';
 import {
   CART_ADD_PRODUCT,
@@ -15,6 +15,8 @@ import {
 } from '../data/constants';
 import { PAGE_EVENTS_DEFAULT } from '../helpers/constants';
 import useLocalStorage from './useLocalStorage';
+
+import { clickAddEvent } from '../services/personalizeService';
 
 const cartReducer = (state, action) => {
   switch (action.type) {
@@ -119,6 +121,7 @@ export const CartProvider = (props) => {
   const addProductToCart = (product, quantity = 1, page = PAGE_EVENTS_DEFAULT) => {
     addProduct(product, quantity);
 
+    // discover add to cart event
     trackAddToCartEvent(
       [
         {
@@ -131,6 +134,9 @@ export const CartProvider = (props) => {
       page,
       PageController.getContext().toJson(),
     );
+
+    // personalize add to cart event
+    clickAddEvent(product, quantity);
   };
 
   const addProductsToCart = (products, page = PAGE_EVENTS_DEFAULT) => {
@@ -143,6 +149,9 @@ export const CartProvider = (props) => {
         price: product.final_price,
         priceOriginal: product.price,
       });
+
+      // personalize add to cart event
+      clickAddEvent(product, 1);
     });
 
     trackAddToCartEvent(productsEventTrack, page, PageController.getContext().toJson());

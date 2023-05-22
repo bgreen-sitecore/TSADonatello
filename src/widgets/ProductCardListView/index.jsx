@@ -5,6 +5,7 @@ import ProductCardModal from '../../components/ProductCardModal';
 import getProductUrl from '../../helpers/getProductUrl';
 import { PageEventContext } from '../../hocs/withPageTracking';
 import { useCart } from '../../hooks/cart';
+import { handleClickProductEvent } from '../../services/personalizeService';
 import ProductCardStyled from './styled';
 
 const ProductCard = (props) => {
@@ -14,6 +15,7 @@ const ProductCard = (props) => {
     displaySku,
     displayAddToCard,
     displayQuickView,
+    rfkid,
     ...respProps
   } = props;
   const { addProductToCart } = useCart();
@@ -77,6 +79,7 @@ const ProductCard = (props) => {
             onClick={(event) => {
               event.preventDefault();
               onProductClick({ sku: product.sku || '' });
+              handleClickProductEvent(product.sku, rfkid);
               navigate(getProductUrl(product));
             }}
           >
@@ -103,12 +106,14 @@ ProductCard.propTypes = {
   displayAddToCard: PropTypes.bool,
   displayQuickView: PropTypes.bool,
   onProductClick: PropTypes.func.isRequired,
+  rfkid: PropTypes.string,
 };
 
 ProductCard.defaultProps = {
   displaySku: true,
   displayAddToCard: true,
   displayQuickView: true,
+  rfkid: '',
 };
 
 export default ProductCard;
