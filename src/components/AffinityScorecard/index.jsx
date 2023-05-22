@@ -207,7 +207,7 @@ function AffinityScorecard() {
           }),
         };
 
-        fetch(`https://data-user-profile.prod.rfksrv.com/user-profile/v3/${domain}`, requestOptions)
+        fetch(`https://data-user-profile-external.prod.rfksrv.com/user-profile/v3/${domain}`, requestOptions)
           .then((response) => response.json())
           .then((data) => {
             // eslint-disable-next-line no-console
