@@ -3,21 +3,24 @@ import { PageController } from '@sitecore-discover/react';
 import * as React from 'react';
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
+import { engage } from '../../engage';
 import discover from '../../images/discover.png';
 import sitecore from '../../images/sitecore.png';
+import { updateAffinities } from '../../services/personalizeService';
 import './styles.css';
 
+/* This is a component for demoing the integration between Discover and Personalize
+ */
 function AffinityScorecard() {
   const domain = '211430803';
   // const [uuid, setUUID] = getCookie('__ruid');
   const uuid = PageController.getContext().getUserUuid();
   const dispUUID = `${PageController.getContext().getUserUuid().substring(0, 40)}...`;
+  const [CDPID, setCDPID] = useState('tempID');
 
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
   const [updateCDP, setUpdateCDP] = useState(false);
-  const [setCDPUpdated] = useState(false);
-  const [universalID, setUniversalID] = useState(null);
 
   const [userProfile, setUserProfile] = useState([]);
   const [affinities, setAffinities] = useState([]);
@@ -113,74 +116,24 @@ function AffinityScorecard() {
     return thisCategory;
   }
 
-  function properCase(str) {
-    return str.replace(/(^|\s)\S/g, (t) => t.toUpperCase());
+  function buildCDP() {
+    try {
+      updateAffinities(affinities, CDPID);
+      // eslint-disable-next-line no-console
+      console.log(`CDP updated`);
+      setIsErr(false);
+    } catch (cdpErr) {
+      setIsErr(true);
+      setErr(cdpErr);
+      // eslint-disable-next-line no-console
+      console.log(cdpErr);
+    }
   }
 
-  function buildCDP(data) {
-    if (data.affinity) {
-      const cdpAffinities = Object.entries(data.affinity);
-      if (cdpAffinities.length > 0) {
-        // eslint-disable-next-line no-console
-        console.log(`Updaing CDP profile for ${universalID}`);
-        for (let i = 0; i < cdpAffinities.length; i += 1) {
-          const affinity = cdpAffinities[i];
-          if (affinity[1] != null && affinity[1].length > 0) {
-            const name = affinity[0];
-            let values = affinity[1];
-            values = values.sort((a, b) => b.score - a.score);
-
-            let jsonObj = '';
-            jsonObj += `{`;
-            jsonObj += `"key": "${name}",`;
-            for (let v = 0; v < values.length; v += 1) {
-              const score = Number(values[v].score).toFixed(3);
-              const val = values[v].value;
-              jsonObj += `"${val}":${score}`;
-              if (v < values.length - 1) {
-                jsonObj += `,`;
-              }
-            }
-            jsonObj += `}`;
-
-            const myHeaders = new Headers();
-            myHeaders.append('Accept', 'application/json');
-            myHeaders.append(
-              'Authorization',
-              'Basic cHFzU0lPUEF4aE1DOXpKTEpTWk5GVVJQTnFBTElGd2Q6SkdyMHA2UTZMZ3ltUkxrenU0VEt4NGE3QmE4QW9TejA=',
-            );
-            myHeaders.append('Content-Type', 'application/json');
-
-            const requestOptions = {
-              method: 'POST',
-              headers: myHeaders,
-              body: jsonObj,
-              redirect: 'follow',
-            };
-
-            const url = `https://api.boxever.com/v2/guests/${universalID}/ext${properCase(name)}`;
-            try {
-              fetch(url, requestOptions);
-              // const data = await response.json();
-              setCDPUpdated(true);
-              // eslint-disable-next-line no-console
-              console.log(`CDP updated: ${name}`);
-              setIsErr(false);
-            } catch (cdpErr) {
-              setCDPUpdated(false);
-              setIsErr(true);
-              setErr(cdpErr);
-              // eslint-disable-next-line no-console
-              console.log(cdpErr);
-            }
-          }
-        }
-        if (setCDPUpdated) {
-          // eslint-disable-next-line no-console
-          console.log('CDP update complete.');
-        }
-      }
-    }
+  function getCDPID() {
+    engage.getGuestId().then((response) => {
+      setCDPID(response);
+    });
   }
 
   useEffect(() => {
@@ -217,8 +170,9 @@ function AffinityScorecard() {
             setKeywords(buildKeywords(data));
             setProducts(buildProduct(data));
             setCategories(buildCategory(data));
-            if (setUpdateCDP && universalID != null) {
-              buildCDP(data);
+            getCDPID();
+            if (updateCDP) {
+              buildCDP();
             }
           });
       } catch (error) {
@@ -242,9 +196,8 @@ function AffinityScorecard() {
   /* eslint-enable no-param-reassign */
 
   const handleSubmit = (event) => {
-    const cdpID = event.target.universalIDInput.value;
     event.preventDefault();
-    if (cdpID.length === 0 || cdpID.length < 30) {
+    if (CDPID.length === 0 || CDPID.length < 30) {
       setUpdateCDP(false);
       setIsErr(true);
       setErrStyle('errorShow');
@@ -254,7 +207,7 @@ function AffinityScorecard() {
       setUpdateCDP(true);
       setIsErr(false);
       setErrStyle('errorHide');
-      setUniversalID(cdpID);
+      buildCDP();
       return true;
     }
   };
@@ -285,8 +238,12 @@ function AffinityScorecard() {
         <div id="header">Powered by Sitecore Discover</div>
         <div id="scorecard">
           <div id="uuid">
-            <b>UUID:&nbsp;</b>
+            <b>Discover UUID:&nbsp;</b>
             {dispUUID == null ? 'n/a' : dispUUID}
+          </div>
+          <div id="cdpID">
+            <b>CDP ID:&nbsp;</b>
+            {CDPID}
           </div>
           <div id="message" className={affinities.length > 1 ? 'hideMe' : 'showMe'}>
             Browsing behavior not available
@@ -354,8 +311,17 @@ function AffinityScorecard() {
             <div className={errStyle}>{err}</div>
             <div id="cdpInputs">
               <img src={sitecore} alt="Sitecore Logo" />
-              <span>Universal ID:</span>
-              <input id="cdpInput" type="text" name="universalIDInput" disabled={updateCDP} />
+              <span>CDP ID:</span>
+              <input
+                id="cdpInput"
+                type="text"
+                value={CDPID}
+                onChange={(e) => {
+                  setCDPID(e.target.value);
+                }}
+                name="universalIDInput"
+                disabled={updateCDP}
+              />
               <input type="submit" value="Connect" className={!updateCDP ? 'showMe cdpButton' : 'hideMe cdpButton'} />
               <input
                 type="button"

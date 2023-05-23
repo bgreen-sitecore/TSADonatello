@@ -1,4 +1,5 @@
-import { CDP_CLIENT_KEY, CDP_POINT_OF_SALE, CDP_TARGET_URL, engage } from '../engage';
+import { Buffer } from 'buffer';
+import { CDP_CLIENT_KEY, CDP_PASSWORD, CDP_POINT_OF_SALE, CDP_TARGET_URL, engage } from '../engage';
 import { CDP_CHANNEL, CDP_CURRENCY, CDP_LANGUAGE } from '../helpers/constants';
 
 export const sendPageViewEvent = async (pageType, pageContext) => {
@@ -225,6 +226,102 @@ export const closeSessionEvent = async () => {
 
   if (response) {
     console.log('Sitecore Engage SDK :::Force Close Event. bid: ', engage.getBrowserId());
+  }
+};
+
+function setAffinityType(inputValues) {
+  const values = inputValues.sort((a, b) => b.score - a.score);
+
+  const affinityList = {};
+  let maxScore = 0;
+  let maxValue = '';
+
+  for (let v = 0; v < values.length; v += 1) {
+    const score = Number(values[v].score).toFixed(3);
+    const { val } = values[v];
+    affinityList[val] = score;
+
+    if (score > maxScore) {
+      maxScore = score;
+      maxValue = val;
+    }
+  }
+  return [JSON.stringify(affinityList), maxScore, maxValue];
+}
+
+export const updateAffinities = async (data, universalID) => {
+  if (data) {
+    const affinities = Object.entries(data);
+    console.log(`Updating CDP profile for ${universalID}`);
+
+    const jsonObj = {};
+    jsonObj.key = 'default';
+
+    if (affinities.length > 0) {
+      for (let i = 0; i < affinities.length; i += 1) {
+        const affinity = affinities[i];
+        const values = affinity[1].affinityValues;
+
+        switch (affinity[1].name) {
+          case 'brand': {
+            [jsonObj.brandAffinities, jsonObj.brandTopAffinityScore, jsonObj.brandTopAffinity] =
+              setAffinityType(values);
+
+            break;
+          }
+          case 'category_names': {
+            [jsonObj.categoryAffinities, jsonObj.categoryTopAffinityScore, jsonObj.categoryTopAffinity] =
+              setAffinityType(values);
+
+            break;
+          }
+          case 'color': {
+            [jsonObj.colorAffinities, jsonObj.colorTopAffinityScore, jsonObj.colorTopAffinity] =
+              setAffinityType(values);
+
+            break;
+          }
+          case 'genders': {
+            [jsonObj.genderAffinities, jsonObj.genderTopAffinityScore, jsonObj.genderTopAffinity] =
+              setAffinityType(values);
+
+            break;
+          }
+          case 'size': {
+            [jsonObj.sizeAffinities, jsonObj.sizeTopAffinityScore, jsonObj.sizeTopAffinity] = setAffinityType(values);
+
+            break;
+          }
+          case 'activities_list': {
+            [jsonObj.activitiesAffinities, jsonObj.activitiesTopAffinityScore, jsonObj.activitiesTopAffinity] =
+              setAffinityType(values);
+
+            break;
+          }
+          default: {
+            break;
+          }
+        }
+      }
+
+      const myHeaders = new Headers();
+      const base64Credentials = Buffer.from(`${CDP_CLIENT_KEY}:${CDP_PASSWORD}`).toString('base64');
+
+      myHeaders.append('Accept', 'application/json');
+      myHeaders.append('Authorization', `Basic ${base64Credentials}`);
+      myHeaders.append('Content-Type', 'application/json');
+
+      const requestOptions = {
+        method: 'POST',
+        headers: myHeaders,
+        body: JSON.stringify(jsonObj),
+        redirect: 'follow',
+      };
+
+      const url = `${CDP_TARGET_URL}/v2/guests/${universalID}/extext`;
+
+      fetch(url, requestOptions);
+    }
   }
 };
 
