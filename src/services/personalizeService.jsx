@@ -236,7 +236,7 @@ function setAffinityType(inputValues) {
   let maxScore = 0;
   let maxValue = '';
 
-  for (let v = 0; v < values.length; v += 1) {
+  for (let v = 0; v < 5; v += 1) {
     const score = Number(values[v].score).toFixed(3);
     const { val } = values[v];
     affinityList[val] = score;
