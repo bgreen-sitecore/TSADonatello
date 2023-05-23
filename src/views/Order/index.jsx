@@ -7,7 +7,7 @@ import { PAGE_EVENTS_ORDER } from '../../helpers/constants';
 import getProductUrl from '../../helpers/getProductUrl';
 import withPageTracking from '../../hocs/withPageTracking';
 import { useCart } from '../../hooks/cart';
-import { handleClickCheckoutEvent, handleClickConfirmEvent } from '../../services/personalizeService';
+import { sendCheckoutEvent } from '../../services/personalizeService';
 import CustomPageWidgets from '../../widgets/CustomPageWidgets';
 
 function makeid(length) {
@@ -46,8 +46,7 @@ const OrderView = () => {
     const orderId = makeid(32);
 
     // CDP track order event
-    handleClickConfirmEvent('checkout', skusItems);
-    handleClickCheckoutEvent('checkout', orderId);
+    sendCheckoutEvent('checkout', orderId, cart);
 
     // discover track order event
     trackOrderConfirmEvent(
