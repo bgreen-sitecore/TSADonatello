@@ -189,6 +189,79 @@ export const handleClickCheckoutEvent = async (page, orderReference) => {
   }
 };
 
+export const sendCheckoutEvent = async (page, orderReference, cartItems) => {
+  console.log('cartItems : ', cartItems);
+
+  const orderItems = [];
+  let orderTotal = 0;
+  let includesSale = false;
+  let freeShippingOrder = false;
+
+  cartItems.forEach((item) => {
+    const itemType = item.data.category_names[0].replace(' ', '_').toUpperCase();
+    orderTotal += parseInt(item.data.final_price, 10);
+
+    if (!includesSale) includesSale = item.data.sale_flag === '1';
+    if (!freeShippingOrder) freeShippingOrder = item.data.free_shipping === '1';
+
+    orderItems.push({
+      type: itemType,
+      referenceId: item.data.sku,
+      orderedAt: new Date().toISOString(),
+      status: 'PURCHASED',
+      currencyCode: CDP_CURRENCY,
+      price: item.data.final_price,
+      name: item.data.name,
+      productId: item.data.prod_id,
+      quantity: item.quantity,
+      extensions: [
+        {
+          name: 'ext',
+          key: 'default',
+          brand: item.data.brand,
+          color: item.data.colors[0],
+          gender: item.data.gender,
+          size: item.data.size,
+          stock: item.stock_quantity,
+          onSale: item.data.sale_flag === '1',
+          freeShipping: item.data.free_shipping === '1',
+        },
+      ],
+    });
+  });
+
+  const eventData = {
+    currency: CDP_CURRENCY,
+    pointOfSale: CDP_POINT_OF_SALE,
+    language: CDP_LANGUAGE,
+    page,
+    order: {
+      referenceId: orderReference,
+      orderedAt: new Date().toISOString(),
+      status: 'PURCHASED',
+      currencyCode: CDP_CURRENCY,
+      price: orderTotal,
+      paymentType: 'Card',
+      cardType: 'Visa',
+      extensions: [
+        {
+          name: 'ext',
+          key: 'default',
+          includesSale,
+          freeShippingOrder,
+        },
+      ],
+      orderItems,
+    },
+  };
+
+  const response = await engage.event('ORDER_CHECKOUT', eventData);
+
+  if (response) {
+    console.log('Sitecore Engage SDK ::: Order Checkout Event. bid: ', engage.getBrowserId());
+  }
+};
+
 export const handleClickProductEvent = async (sku, rfkid) => {
   const eventData = {
     channel: CDP_CHANNEL,
