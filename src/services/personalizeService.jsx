@@ -85,8 +85,9 @@ export const clickAddEvent = async (product, inputQuantity) => {
     categoies: product.category_names,
     colors: product.colors,
     gender: product.gender,
-    sale_flag: product.sale_flag,
+    onSale: product.sale_flag === '1',
     size: product.size,
+    productImage: product.image_url,
   };
 
   const response = await engage.event('ADD', eventData, extensionData);
