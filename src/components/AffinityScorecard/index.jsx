@@ -171,9 +171,7 @@ function AffinityScorecard() {
             setProducts(buildProduct(data));
             setCategories(buildCategory(data));
             getCDPID();
-            if (updateCDP) {
-              buildCDP();
-            }
+            buildCDP();
           });
       } catch (error) {
         // eslint-disable-next-line no-console
