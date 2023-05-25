@@ -17,6 +17,7 @@ function AffinityScorecard() {
   const uuid = PageController.getContext().getUserUuid();
   const dispUUID = `${PageController.getContext().getUserUuid().substring(0, 40)}...`;
   const [CDPID, setCDPID] = useState('tempID');
+  const dispCDPID = `${CDPID.substring(0, 40)}...`;
 
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
@@ -236,12 +237,12 @@ function AffinityScorecard() {
         <div id="header">Powered by Sitecore Discover</div>
         <div id="scorecard">
           <div id="uuid">
-            <b>Discover UUID:&nbsp;</b>
+            <b>Discover ID:&nbsp;</b>
             {dispUUID == null ? 'n/a' : dispUUID}
           </div>
           <div id="cdpID">
             <b>CDP ID:&nbsp;</b>
-            {CDPID}
+            {dispCDPID == null ? 'n/a' : dispCDPID}
           </div>
           <div id="message" className={affinities.length > 1 ? 'hideMe' : 'showMe'}>
             Browsing behavior not available

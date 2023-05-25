@@ -53,9 +53,17 @@
 #uuid {
     font-size: 12px;
     margin-top: 10px;
-    text-align: center;
+    text-align: left;
     width: 100%;
 }
+
+#cdpID {
+    font-size: 12px;
+    margin-top: 10px;
+    text-align: left;
+    width: 100%;
+}
+
 
 #scorecard {
     display: block;
