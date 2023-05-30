@@ -4,7 +4,7 @@ import withPageTracking from '../../hocs/withPageTracking';
 import RecommendationListWidget from '../../widgets/BasicRecommendationList';
 import './styles.css';
 
-import { handlePersonalizationManual, handleShownRecommendationsEvent } from '../../services/personalizeService';
+import { handlePersonalization, handleShownRecommendationsEvent } from '../../services/personalizeService';
 
 /**
  * This page shows the main page of the site.
@@ -27,7 +27,7 @@ const Home = () => {
   );
   const [position, setPosition] = React.useState('top');
 
-  const response = handlePersonalizationManual('laser_personas');
+  const response = handlePersonalization('laser_personas');
 
   response.then((personalization) => {
     setrec1Title(personalization.recs[0].recTitle);
