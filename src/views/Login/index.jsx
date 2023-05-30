@@ -34,13 +34,14 @@ const LoginView = () => {
                   </label>
                 </td>
                 <td width={300}>
-                  <select type="email" id="email" value={email} onChange={handleEmailChange}>
+                  <input list="emailList" type="email" id="email" value={email} onChange={handleEmailChange} />
+                  <datalist type="email" id="emailList">
                     <option value="">Select an email</option>
                     <option value="brie.larson@gmail.com">brie.larson@gmail.com</option>
                     <option value="scott.ryan@gmail.com">scott.ryan@gmail.com</option>
                     <option value="pedro.pascal@gmail.com">pedro.pascal@gmail.com</option>
                     <option value="ivy.george@gmail.com">ivy.george@gmail.com</option>
-                  </select>
+                  </datalist>
                 </td>
                 <td width={500}>
                   <button className="btn btn-primary" type="submit">
