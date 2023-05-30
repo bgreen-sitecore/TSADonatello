@@ -36,7 +36,7 @@ export const handleShownRecommendationsEvent = async (personalization) => {
   }
 };
 
-export const sendIdentityEvent = async (inputEmail, inputPage) => {
+export const sendIdentityEvent = async (inputEmail, inputPage, firstName, lastName) => {
   const eventData = {
     channel: CDP_CHANNEL,
     currency: CDP_CURRENCY,
@@ -44,6 +44,8 @@ export const sendIdentityEvent = async (inputEmail, inputPage) => {
     language: CDP_LANGUAGE,
     page: inputPage,
     email: inputEmail,
+    firstName,
+    lastName,
     identifiers: [
       {
         id: inputEmail,
