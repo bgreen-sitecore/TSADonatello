@@ -12,7 +12,13 @@ import { handlePersonalization, handleShownRecommendationsEvent } from '../../se
  * The other static recommendation widgets render here has been created in CEC panel with the configuration "WILL BE USED IN" set in "Common across all Pages" (hs_trending, hs_best_seller, hs_feature) to can be used in a hard code mode
  */
 
+// Check if the user is on a mobile device
+export function isMobileDevice() {
+  return window.innerWidth <= 800; // Adjust the threshold as needed
+}
+
 const Home = () => {
+  let numRecommendations = 5;
   const [rec1Title, setrec1Title] = React.useState('Our Customer Favorites');
   const [rec2Title, setrec2Title] = React.useState("What's Hot this Spring");
   const [rec3Title, setrec3Title] = React.useState('Gear to Get You Moving');
@@ -27,6 +33,10 @@ const Home = () => {
   );
   const [position, setPosition] = React.useState('top');
 
+  if (isMobileDevice()) {
+    numRecommendations = 2;
+  }
+
   const response = handlePersonalization('laser_personas');
 
   response.then((personalization) => {
@@ -38,7 +48,11 @@ const Home = () => {
     setrec2Recipe(personalization.recs[1].recipeID);
     setrec3Recipe(personalization.recs[2].recipeID);
 
-    setTitle(personalization.homepageTitle);
+    if (isMobileDevice()) {
+      setTitle();
+    } else {
+      setTitle(personalization.homepageTitle);
+    }
     setHomepageImg(personalization.homepageImage);
     setPosition(personalization.homepageTitlePosition);
 
@@ -85,7 +99,7 @@ const Home = () => {
               <RecommendationListWidget
                 title={rec1Title}
                 rfkId={rec1Recipe}
-                productsToDisplay={5}
+                productsToDisplay={numRecommendations}
                 displayAddToCard
                 displayQuickView
               />
@@ -96,7 +110,7 @@ const Home = () => {
               <RecommendationListWidget
                 title={rec2Title}
                 rfkId={rec2Recipe}
-                productsToDisplay={5}
+                productsToDisplay={numRecommendations}
                 displayAddToCard
                 displayQuickView
               />
@@ -107,7 +121,7 @@ const Home = () => {
               <RecommendationListWidget
                 title={rec3Title}
                 rfkId={rec3Recipe}
-                productsToDisplay={5}
+                productsToDisplay={numRecommendations}
                 displayAddToCard
                 displayQuickView
               />

@@ -6,8 +6,15 @@ import { Header, ProductsGrid, RecommendationContainer } from './styled';
 
 import ProductCardListView from '../ProductCardListView';
 
+// Check if the user is on a mobile device
+function isMobileDevice() {
+  return window.innerWidth <= 800; // Adjust the threshold as needed
+}
+
 export const RecommendationList = (props) => {
   const { title, productsToDisplay, displayAddToCard, displaySku, displayQuickView, rfkId, ...restProps } = props;
+  let gridColumStlye = '1fr 1fr 1fr 1fr 1fr';
+
   const {
     actions: { onProductClick },
     queryResult: { isLoading, isFetching, data: { content: { product: { value: products = [] } = {} } = {} } = {} },
@@ -17,13 +24,22 @@ export const RecommendationList = (props) => {
 
   const ready = !isLoading && !isFetching && products.length > 0;
 
+  if (isMobileDevice()) {
+    console.log('User is on a mobile device');
+    gridColumStlye = '1fr 1fr';
+  }
+
   return (
     <RecommendationContainer {...restProps}>
       {ready && (
         <>
           {title && <Header>{title}</Header>}
 
-          <ProductsGrid>
+          <ProductsGrid
+            style={{
+              'grid-template-columns': gridColumStlye,
+            }}
+          >
             {products.map((p, index) => (
               <ProductCardListView
                 product={p}
