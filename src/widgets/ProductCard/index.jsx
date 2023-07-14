@@ -6,6 +6,7 @@ import getProductUrl from '../../helpers/getProductUrl';
 import ProductCardModal from '../../components/ProductCardModal';
 import { PageEventContext } from '../../hocs/withPageTracking';
 import { useCart } from '../../hooks/cart';
+import { handleClickProductEvent } from '../../services/personalizeService';
 import ProductCardStyled from './styled';
 
 const ProductCard = (props) => {
@@ -74,6 +75,7 @@ const ProductCard = (props) => {
             onClick={(event) => {
               event.preventDefault();
               onProductClick({ sku: product.sku || '' });
+              handleClickProductEvent(product.sku, '');
               navigate(getProductUrl(product));
             }}
           >
