@@ -29,7 +29,7 @@ const Home = () => {
 
   const [title, setTitle] = React.useState('Welcome to Sitecore Sports & Leisure');
   const [homepageImg, setHomepageImg] = React.useState(
-    'https://d368g9lw5ileu7.cloudfront.net/races/races-30xxx/30749/raceBanner-3YS4GBud-byXW04.jpg',
+    'https://www.lifestylesports.com/on/demandware.static/-/Library-Sites-LSSSharedLibrary/default/dw8591bec8/Home/DG-COORDS-Hero_Banner-Desktop.jpg',
   );
   const [position, setPosition] = React.useState('top');
 
