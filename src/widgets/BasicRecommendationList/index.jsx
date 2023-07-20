@@ -25,7 +25,6 @@ export const RecommendationList = (props) => {
   const ready = !isLoading && !isFetching && products.length > 0;
 
   if (isMobileDevice()) {
-    console.log('User is on a mobile device');
     gridColumStlye = '1fr 1fr';
   }
 
@@ -37,7 +36,7 @@ export const RecommendationList = (props) => {
 
           <ProductsGrid
             style={{
-              'grid-template-columns': gridColumStlye,
+              gridTemplateColumns: gridColumStlye,
             }}
           >
             {products.map((p, index) => (

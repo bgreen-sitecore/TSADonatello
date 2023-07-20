@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { engage } from '../../engage';
 import { PAGE_EVENTS_HOME } from '../../helpers/constants';
 import withPageTracking from '../../hocs/withPageTracking';
 import RecommendationListWidget from '../../widgets/BasicRecommendationList';
@@ -18,6 +19,8 @@ export function isMobileDevice() {
 }
 
 const Home = () => {
+  withPageTracking(Home, PAGE_EVENTS_HOME);
+
   let numRecommendations = 5;
   const [rec1Title, setrec1Title] = React.useState('Our Customer Favorites');
   const [rec2Title, setrec2Title] = React.useState("What's Hot this Spring");
@@ -27,36 +30,45 @@ const Home = () => {
   const [rec2Recipe, setrec2Recipe] = React.useState('hs_best_seller');
   const [rec3Recipe, setrec3Recipe] = React.useState('hs_feature');
 
-  const [title, setTitle] = React.useState('Welcome to Sitecore Sports & Leisure');
-  const [homepageImg, setHomepageImg] = React.useState(
-    'https://www.lifestylesports.com/on/demandware.static/-/Library-Sites-LSSSharedLibrary/default/dw8591bec8/Home/DG-COORDS-Hero_Banner-Desktop.jpg',
-  );
+  const [title, setTitle] = React.useState('');
+  const [homepageImg, setHomepageImg] = React.useState('');
   const [position, setPosition] = React.useState('top');
+  const [personalizedLoaded, setPersonalizatonLoaded] = React.useState(false);
 
   if (isMobileDevice()) {
     numRecommendations = 2;
   }
 
-  const response = handlePersonalization('laser_personas');
+  useEffect(() => {
+    const fetchData = setTimeout(() => {
+      if (engage !== undefined && !personalizedLoaded) {
+        withPageTracking(Home, PAGE_EVENTS_HOME);
+        const response = handlePersonalization('laser_personas');
 
-  response.then((personalization) => {
-    setrec1Title(personalization.recs[0].recTitle);
-    setrec2Title(personalization.recs[1].recTitle);
-    setrec3Title(personalization.recs[2].recTitle);
+        response.then((personalization) => {
+          setrec1Title(personalization.recs[0].recTitle);
+          setrec2Title(personalization.recs[1].recTitle);
+          setrec3Title(personalization.recs[2].recTitle);
 
-    setrec1Recipe(personalization.recs[0].recipeID);
-    setrec2Recipe(personalization.recs[1].recipeID);
-    setrec3Recipe(personalization.recs[2].recipeID);
+          setrec1Recipe(personalization.recs[0].recipeID);
+          setrec2Recipe(personalization.recs[1].recipeID);
+          setrec3Recipe(personalization.recs[2].recipeID);
 
-    if (isMobileDevice()) {
-      setTitle();
-    } else {
-      setTitle(personalization.homepageTitle);
-    }
-    setHomepageImg(personalization.homepageImage);
-    setPosition(personalization.homepageTitlePosition);
+          if (isMobileDevice()) {
+            setTitle();
+          } else {
+            setTitle(personalization.homepageTitle);
+          }
+          setHomepageImg(personalization.homepageImage);
+          setPosition(personalization.homepageTitlePosition);
 
-    handleShownRecommendationsEvent(personalization);
+          handleShownRecommendationsEvent(personalization);
+
+          setPersonalizatonLoaded(true);
+        });
+      }
+    }, 500);
+    return () => clearTimeout(fetchData);
   });
 
   return (

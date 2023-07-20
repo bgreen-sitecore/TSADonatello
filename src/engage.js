@@ -12,6 +12,8 @@ export const CDP_PASSWORD = process.env.REACT_APP_CDP_PASSWORD;
 const loadEngage = async () => {
   console.log('loading engage : ', CDP_CLIENT_KEY, ' ', CDP_POINT_OF_SALE, ' ', CDP_COOKIE_DOMAIN, ' ', CDP_TARGET_URL);
 
+  const startTime = Date.now();
+
   engage = await init({
     clientKey: CDP_CLIENT_KEY,
     targetURL: CDP_TARGET_URL,
@@ -22,6 +24,10 @@ const loadEngage = async () => {
     includeUTMParameters: true,
     webPersonalization: true,
   });
+
+  const elapsedTime = Date.now() - startTime;
+
+  console.log('engage loaded, time to load: ', elapsedTime.toFixed(3), 'ms');
 };
 
 loadEngage();

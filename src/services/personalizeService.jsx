@@ -290,10 +290,10 @@ function setAffinityType(inputValues) {
   return [JSON.stringify(affinityList), maxScore, maxValue];
 }
 
-export const updateAffinities = async (data, universalID) => {
+export const updateAffinities = async (data, GuestRef) => {
   if (data) {
     const affinities = Object.entries(data);
-    console.log(`Updating CDP profile for ${universalID}`);
+    console.log(`Updating CDP profile for ${GuestRef}`);
 
     const jsonObj = {};
     jsonObj.key = 'default';
@@ -359,7 +359,7 @@ export const updateAffinities = async (data, universalID) => {
         redirect: 'follow',
       };
 
-      const url = `${CDP_TARGET_URL}/v2/guests/${universalID}/extext`;
+      const url = `${CDP_TARGET_URL}/v2/guests/${GuestRef}/extext`;
 
       fetch(url, requestOptions);
     }
