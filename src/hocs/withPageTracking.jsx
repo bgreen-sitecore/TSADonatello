@@ -13,6 +13,24 @@ export const PageEventContext = React.createContext();
  * This is the purpouse of this hoc, set page uri and track the page view event
  */
 
+// eslint-disable-next-line import/no-mutable-exports
+let firstViewEvent = false;
+
+export const firstEngageView = (Component, pageType = PAGE_EVENTS_DEFAULT) => {
+  const uri = useUri();
+
+  useEffect(() => {
+    const fetchData = setTimeout(() => {
+      if (engage !== undefined && !firstViewEvent) {
+        PageController.getContext().setPageUri(uri);
+        sendPageViewEvent(pageType, PageController.getContext().toJson());
+        firstViewEvent = true;
+      }
+    }, 100);
+    return () => clearTimeout(fetchData);
+  });
+};
+
 const withPageTracking =
   (Component, pageType = PAGE_EVENTS_DEFAULT) =>
   (props) => {
@@ -26,11 +44,11 @@ const withPageTracking =
 
     // personalize page view event
     useEffect(() => {
-      PageController.getContext().setPageUri(uri);
       if (engage !== undefined) {
+        PageController.getContext().setPageUri(uri);
         sendPageViewEvent(pageType, PageController.getContext().toJson());
       }
-    }, []);
+    }, [uri, engage]);
 
     return (
       <PageEventContext.Provider value={pageType}>
