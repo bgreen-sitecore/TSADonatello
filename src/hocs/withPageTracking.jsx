@@ -31,6 +31,10 @@ export const firstEngageView = (Component, pageType = PAGE_EVENTS_DEFAULT) => {
   });
 };
 
+export function getFirstViewEventTriggered() {
+  return firstViewEvent;
+}
+
 const withPageTracking =
   (Component, pageType = PAGE_EVENTS_DEFAULT) =>
   (props) => {

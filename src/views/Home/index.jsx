@@ -1,9 +1,8 @@
-// import { PageController } from '@sitecore-discover/react';
 import React, { useEffect } from 'react';
 import { engage } from '../../engage';
 import { PAGE_EVENTS_HOME } from '../../helpers/constants';
-import withPageTracking, { firstEngageView } from '../../hocs/withPageTracking';
-// import useUri from '../../hooks/useUri';
+import withPageTracking, { firstEngageView, getFirstViewEventTriggered } from '../../hocs/withPageTracking';
+
 import RecommendationListWidget from '../../widgets/BasicRecommendationList';
 import './styles.css';
 
@@ -43,7 +42,7 @@ const Home = () => {
 
   useEffect(() => {
     const fetchData = setTimeout(() => {
-      if (engage !== undefined && !personalizedLoaded) {
+      if (engage !== undefined && !personalizedLoaded && getFirstViewEventTriggered()) {
         try {
           const response = handlePersonalization('laser_personas');
 
