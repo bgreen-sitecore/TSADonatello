@@ -47,6 +47,10 @@ const Home = () => {
           const response = handlePersonalization('laser_personas');
 
           response.then((personalization) => {
+            console.log('status: ', personalization.status);
+            if (personalization.status >= 300) {
+              throw new Error('Bad response from server');
+            }
             setrec1Title(personalization.recs[0].recTitle);
             setrec2Title(personalization.recs[1].recTitle);
             setrec3Title(personalization.recs[2].recTitle);
@@ -70,6 +74,7 @@ const Home = () => {
         } catch (error) {
           // eslint-disable-next-line no-console
           console.log('error', error);
+          setPersonalizatonLoaded(false);
         }
       }
     }, 500);

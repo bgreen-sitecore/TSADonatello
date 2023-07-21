@@ -26,7 +26,7 @@ export const firstEngageView = (Component, pageType = PAGE_EVENTS_DEFAULT) => {
         sendPageViewEvent(pageType, PageController.getContext().toJson());
         firstViewEvent = true;
       }
-    }, 100);
+    }, 200);
     return () => clearTimeout(fetchData);
   });
 };
